@@ -24,7 +24,7 @@ jobs:
       - run: |
           export RUN_STATUS=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $6}')
           echo "Run status : ${RUN_STATUS}"
-          export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}')
+          export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}'| cut -d 'd' -f 1)
           echo "Run Time : ${RUN_TIME}"
           while [ "${RUN_STATUS}" = 'running' ]; do
            if [[ "${RUN_TIME}" lt "$${{ github.event.inputs.run_time }}" ]]; then

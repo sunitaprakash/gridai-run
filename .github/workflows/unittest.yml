@@ -1,29 +1,30 @@
-name: 'Grid.ai Login Test'
+name: 'Grid.ai Terminate Run'
 on:
-  pull_request:
-  push:
-    branches:
-      - main
-
+  workflow_dispatch:
+    inputs:
+      run_name:
+        required: false
+        default:  "c$(date '+%y%m%d-%H%M%S')"
+        type: string
 jobs:
-  unittests:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]   #,macos-latest,windows-latest]
-        python-version: [3.8] #,3.9]       
-        python-venv: [""]     #,"venv"]       
-    runs-on: ${{ matrix.os }}
+  gridai-actions:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2     
-      - uses: gridai-actions/gridai-login@main
+      - uses: actions/checkout@v2
+      - uses: gridai-actions/gridai-login@v0
         with:
-          python-version: ${{ matrix.python-version }}
-          python-venv: ${{ matrix.python-venv }}
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
-          gridai-key: ${{ secrets.GRIDAI_KEY }} 
+          gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
-        mkdir hello
-        cd hello
-        echo "print ('hello'); f = open("weights.pt", "a"); f.write("fake weights"); f.close()" > run.py
-        echo "os" > requirements.txt
-      - uses: gridai-actions/gridai-run@main
+          ls -al grid.run.log
+          echo The RunName is ${{ github.event.inputs.run_name }}
+          echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
+          #grid logs --show-build-logs ${EXP_NAME}
+      - run: |
+          sleep 240 &&
+          grid logs --show-build-logs "sunitaprakash:${{ github.event.inputs.run_name }}-exp0" | tee grid.buildlog
+      - id: grid-status
+        uses: gridai-actions/gridai-status@v0
+        with:
+          obj-type: run
+          obj-id: ${run_name}

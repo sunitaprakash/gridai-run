@@ -19,7 +19,7 @@ jobs:
           echo The RunName is ${{ github.event.inputs.run_name }}
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
-          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} |  awk -F, '{print $3}')
+          export RUN_STATUS=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $6}')
           echo Run status : ${RUN_STATUS}
           grid status ${{ github.event.inputs.run_name }}
       - id: grid-status

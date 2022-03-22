@@ -3,9 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       run_name:
-        required: false
+        required: true
         default:  "c$(date '+%y%m%d-%H%M%S')"
         type: string
+      run_time:
+        required: true
+        type: int
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
@@ -23,6 +26,7 @@ jobs:
           echo Run status : ${RUN_STATUS}
           export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}')
           echo Run Time : $RUN_TIME
+          
           
       - id: grid-status
         uses: gridai-actions/gridai-status@v0

@@ -30,6 +30,14 @@ jobs:
            if [[ "${RUN_TIME}" lt "$${{ github.event.inputs.run_time }}" ]]; then
             echo "Error: ${RUN_TIME} is less then "$${{ github.event.inputs.run_time }}""
           fi
+          done
+          case ${RUN_STATUS} in
+            running)
+              ;;
+            *)
+              echo "${RUN_NAME} is not running"
+              exit 1
+          esac  
           
           
       - id: grid-status

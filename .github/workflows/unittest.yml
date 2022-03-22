@@ -21,7 +21,9 @@ jobs:
       - run: |
           export RUN_STATUS=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $6}')
           echo Run status : ${RUN_STATUS}
-          grid status ${{ github.event.inputs.run_name }}
+          export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}')
+          echo Run Time : $RUN_TIME
+          
       - id: grid-status
         uses: gridai-actions/gridai-status@v0
         with:

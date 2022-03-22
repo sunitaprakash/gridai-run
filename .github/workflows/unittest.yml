@@ -19,6 +19,8 @@ jobs:
           echo The RunName is ${{ github.event.inputs.run_name }}
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
+          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} |  awk -F, '{print $3}')
+          echo "${RUN_STATUS}" 
           grid status ${{ github.event.inputs.run_name }}
       - id: grid-status
         uses: gridai-actions/gridai-status@v0

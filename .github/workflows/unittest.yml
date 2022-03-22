@@ -16,7 +16,6 @@ jobs:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
-          ls -al grid.run.log
           echo The RunName is ${{ github.event.inputs.run_name }}
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |

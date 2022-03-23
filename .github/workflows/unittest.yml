@@ -12,6 +12,9 @@ on:
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
+    env:
+       RUN_STATUS: temp
+       RUN_TIME: -1 
     steps:
       - uses: actions/checkout@v2
       - uses: gridai-actions/gridai-login@v0

@@ -4,11 +4,15 @@ on:
     inputs:
       run_name:
         required: true
-        default:  "c$(date '+%y%m%d-%H%M%S')"
         type: string
       run_time:
         required: true
         type: int
+    outputs:
+      run-status: 
+        value: ${{ steps.run-script.outputs.run-status }}          
+      run-duration: 
+         value: ${{ steps.run-status.outputs.run-duration }}  
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
@@ -25,10 +29,10 @@ jobs:
           echo The RunName is ${{ github.event.inputs.run_name }}
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
-          export RUN_STATUS=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $6}')
-          echo "Run status : ${RUN_STATUS}"
-          export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}'| cut -d 'd' -f 1)
-          echo "Run Time : ${RUN_TIME}"
+          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          echo "Run status : ${RUN_STATUS}" >> $GITHUB_ENV
+          export RUN_TIME=$(grid status ${{ github.event.inputs.run_name }} | grep c${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)
+          echo "Run Time : ${RUN_TIME}" >> $GITHUB_ENV
           while [ "${RUN_STATUS}" = 'running' ]; do
            if [[ "${RUN_TIME}" < "$${{ github.event.inputs.run_time }}" ]]; then
             echo "Error: ${RUN_TIME} is less then "$${{ github.event.inputs.run_time }}""

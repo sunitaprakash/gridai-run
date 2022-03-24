@@ -26,19 +26,19 @@ jobs:
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
           export RUN_STATUS=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $6}')
-          echo "Run status : $RUN_STATUS"
+          echo "Run status : ${RUN_STATUS}"
           export RUN_TIME=$(grid status cordial-shirley-3622 | grep cordial-shirley-3622 | awk '{print $10}'| cut -d 'd' -f 1)
-          echo "Run Time : $RUN_TIME"
+          echo "Run Time : ${RUN_TIME}"
           while [ "${RUN_STATUS}" = 'running' ]; do
            if [[ "${RUN_TIME}" < "$${{ github.event.inputs.run_time }}" ]]; then
-            echo "Error: ${ RUN_TIME } is less then "$${{ github.event.inputs.run_time }}""
+            echo "Error: ${RUN_TIME} is less then "$${{ github.event.inputs.run_time }}""
           fi
           done
           case ${RUN_STATUS} in
             running)
               ;;
             *)
-              echo "${RUN_NAME} is not running"
+              echo "${{ github.event.inputs.run_name }} is not running"
               exit 1
           esac  
           

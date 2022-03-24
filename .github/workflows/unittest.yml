@@ -11,9 +11,6 @@ on:
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
-    env:
-       RUN_STATUS: temp
-       RUN_TIME: -1 
     steps:
       - uses: actions/checkout@v2
       - uses: gridai-actions/gridai-login@v0
@@ -25,23 +22,14 @@ jobs:
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
           export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
-          echo "Run status : ${RUN_STATUS}" >> $GITHUB_ENV
+          echo "Runstatus=${RUN_STATUS}" >> $GITHUB_ENV
           export RUN_TIME=$(grid status ${{ github.event.inputs.run_name }} | grep c${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)
-          echo "Run Time : ${RUN_TIME}" >> $GITHUB_ENV
+          echo "RunTime=${RUN_TIME}" >> $GITHUB_ENV
           while [ "${RUN_STATUS}" = 'running' ]; do
-           if [[ "${RUN_TIME}" < "$${{ github.event.inputs.run_time }}" ]]; then
-            echo "Error: ${RUN_TIME} is less then "$${{ github.event.inputs.run_time }}""
+           if [[ "${RUN_TIME}" < "${{ github.event.inputs.run_time }}" ]]; then
+            echo "${RUN_TIME} is less then "${{ github.event.inputs.run_time }}""
           fi
-          done
-          case ${RUN_STATUS} in
-            running)
-              ;;
-            *)
-              echo "${{ github.event.inputs.run_name }} is not running"
-              exit 1
-          esac  
-          
-          
+          done  
       - id: grid-status
         uses: gridai-actions/gridai-status@v0
         with:

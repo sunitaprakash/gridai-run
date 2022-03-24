@@ -21,8 +21,8 @@ jobs:
           echo The RunName is ${{ github.event.inputs.run_name }}
           echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
       - run: |
-          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}') >> $GITHUB_ENV 
-          echo "Runstatus=${RUN_STATUS}"
+          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          echo "Runstatus=${RUN_STATUS}" >> $GITHUB_ENV
           export RUN_TIME=$(grid status ${{ github.event.inputs.run_name }} | grep c${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)
           echo "RunTime=${RUN_TIME}" >> $GITHUB_ENV
           while [ "${RUN_STATUS}" = 'running' ]; do

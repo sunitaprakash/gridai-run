@@ -8,11 +8,6 @@ on:
       run_time:
         required: true
         type: int
-    outputs:
-      run-status: 
-        value: ${{ steps.run-script.outputs.run-status }}          
-      run-duration: 
-         value: ${{ steps.run-status.outputs.run-duration }}  
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest

@@ -19,10 +19,11 @@ jobs:
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
           export RUN_STATUS="$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')"
-          echo "Runstatus $RUN_STATUS" >> $GITHUB_ENV
+          echo Runstatus "$RUN_STATUS" >> $GITHUB_ENV
           export RUN_DURATION="$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)"
-          echo "RunTime $RUN_DURATION" >> $GITHUB_ENV
-          while [ $RUN_STATUS = running ]; do
+          echo RunTime "$RUN_DURATION" >> $GITHUB_ENV
+          while [ "$RUN_STATUS" = running ]
+          do
            if [[ "${{ github.event.inputs.run_time }}" = "$RUN_DURATION"]]; then
                grid stop ${{ github.event.inputs.run_name }}
           fi

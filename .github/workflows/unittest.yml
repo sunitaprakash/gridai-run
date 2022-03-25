@@ -17,16 +17,13 @@ jobs:
         with:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
-        env:
-          RUN_STATUS: temp
-          RUN_DURATION: 0
       - run: |
-          ${{ env.RUN_STATUS }}=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
-          echo "Runstatus ${{ env.RUN_STATUS }}" >> $GITHUB_ENV
-          ${{ env.RUN_DURATION }} = $(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)
-          echo "RunTime ${{ env.RUN_DURATION }}" >> $GITHUB_ENV
-          while [ ${{ env.RUN_STATUS }} = running ]; do
-           if [[ "${{ github.event.inputs.run_time }}" = "$RUN_TIME"]]; then
+          export $RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          echo "Runstatus $RUN_STATUS" >> $GITHUB_ENV
+          export $RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)
+          echo "RunTime $RUN_DURATION" >> $GITHUB_ENV
+          while [ $RUN_STATUS = running ]; do
+           if [[ "${{ github.event.inputs.run_time }}" = "$RUN_DURATION"]]; then
                grid stop ${{ github.event.inputs.run_name }}
           fi
           done  
@@ -35,3 +32,4 @@ jobs:
         with:
           obj-type: run
           obj-id: ${run_name}
+       shell: bash

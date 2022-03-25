@@ -18,12 +18,9 @@ jobs:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
-          # export RUN_STATUS="$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')"
-          echo "RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')" >> $GITHUB_ENV
-          # echo "$RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')" >> $GITHUB_ENV
-          # export RUN_DURATION="$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)"
-          echo "RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)" >> $GITHUB_ENV
+          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}') >> $GITHUB_ENV 
+          export RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1) >> $GITHUB_ENV     
       - run: |
-          echo Runstatus "${{ env.RUN_STATUS }}"
-          echo RunDuration "${{ env.RUN_DURATION }}"
+          echo Runstatus "${RUN_STATUS }"
+          echo RunDuration "${RUN_DURATION}"
 

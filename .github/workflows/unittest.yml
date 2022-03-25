@@ -21,6 +21,6 @@ jobs:
           export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}') >> $GITHUB_ENV 
           export RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1) >> $GITHUB_ENV     
       - run: |
-          echo Runstatus "${RUN_STATUS }"
+          echo Runstatus "${RUN_STATUS}"
           echo RunDuration "${RUN_DURATION}"
 

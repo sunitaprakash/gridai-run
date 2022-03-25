@@ -22,12 +22,11 @@ jobs:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
-          echo The RunName is ${{ github.event.inputs.run_name }}
-          echo EXP_NAME= "${{ github.event.inputs.run_name }}-exp0"           
+          echo The RunName is ${{ github.event.inputs.run_name }}           
       - name: get-run-status
         run: |
-          ::set-output name=RUN_STATUS::$(grid status ${{ secrets.RUN_NAME }}| grep ${{ secrets.RUN_NAME }} | awk '{print $6}')
-          ::set-output name=RUN_DURATION::$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | awk '{print $10}'| cut -d 'd' -f 1)
+          ::set-output name=RUN_STATUS::$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          ::set-output name=RUN_DURATION::$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }}| awk '{print $10}'| cut -d 'd' -f 1)
         id: run-status          
       - name: print-run-status
         run: |

@@ -19,6 +19,9 @@ jobs:
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
           export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          # pool at 1 mins interval
+          # pool at 1 mins interval
+          # pool at 1 mins interval
           export run_status=$RUN_STATUS
           export run_duration=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)   
           echo "run_duration=${run_duration}" >> $GITHUB_ENV

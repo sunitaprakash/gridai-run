@@ -24,6 +24,8 @@ jobs:
           echo "run_duration=${run_duration}" >> $GITHUB_ENV
           export run_name=${{ github.event.inputs.run_name }}
           echo "$run_name"
+          echo Runstatus "${run_status}"
+          echo RunDuration "${run_duration}
       - run: |
           echo Runstatus "${run_status}"
           echo RunDuration "${run_duration}"

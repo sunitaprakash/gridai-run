@@ -25,7 +25,20 @@ jobs:
           export run_name=${{ github.event.inputs.run_name }}
           echo "$run_name"
           echo Runstatus "${run_status}"
-          echo RunDuration "${run_duration}
+          echo RunDuration "${run_duration}"         
+      - name: delete-long-running-run
+        run: |
+          case ${RUN_STATUS} in
+            running)
+              ;;
+            *)
+              echo "${{ github.event.inputs.run_name }} is not running"
+              exit 1
+          esac  
+          if [[ "${RUN_DURATION}" > "$${{ github.event.inputs.run_time }}" ]]; then
+            echo "Run duration has exceeded crossed threhold: ${RUN_DURATION} Run is being deleted"
+            grid run stop run cordial-shirley-3622
+          fi
       - run: |
           echo Runstatus "${run_status}"
           echo RunDuration "${run_duration}"

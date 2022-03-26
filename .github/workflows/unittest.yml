@@ -24,8 +24,8 @@ jobs:
           echo "run_duration=${run_duration}" >> $GITHUB_ENV
           export run_name=${{ github.event.inputs.run_name }}
           echo "$run_name"
-          echo Runstatus "${run_status}"
-          echo RunDuration "${run_duration}"         
+          echo Runstatus "$run_status"
+          echo RunDuration "$run_duration"         
       - name: delete-long-running-run
         run: |
           case ${run_status} in 
@@ -41,6 +41,6 @@ jobs:
             grid run stop run cordial-shirley-3622
           fi
       - run: |
-          echo Runstatus "${run_status}"
-          echo RunDuration "${run_duration}"
+          echo "$run_status"
+          echo "$run_duration"
 

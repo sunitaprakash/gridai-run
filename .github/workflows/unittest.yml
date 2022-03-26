@@ -17,18 +17,18 @@ jobs:
           # 1 mins interval
           export "RUN_STATUS=${RUN_STATUS} >> $GITHUB_ENV
           export RUN_DURATION=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | awk '{print $10}'| cut -d 'd' -f 1)   
-          echo "RUN_DURATION=$RUN_DURATION" >> $GITHUB_ENV       
+          echo "RUN_DURATION=${RUN_DURATION}" >> $GITHUB_ENV       
       - name: delete-long-running-run
         run: |
           case $RUN_STATUS in 
             cancelled)
-              echo "${{ github.event.inputs.run_name }} is stopped" 
+              echo "${{ secrets.RUN_NAME }} is stopped" 
               ;;
             *)
-              echo "${{ github.event.inputs.run_name }} is not running"
+              echo "${{ secrets.RUN_NAME }} is not running"
               exit 1
           esac  
           if [[ "${RUN_DURATION}" > "${{ secrets.RUN_DURATION }}" ]]; then
             echo "Run duration has exceeded ${RUN_DURATION} ${{ secrets.RUN_NAME }} is being stopped"
-            grid run stop ${{ github.event.inputs.run_name }}
+            grid run stop ${{ secrets.RUN_NAME }}
           fi

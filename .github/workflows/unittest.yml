@@ -28,8 +28,9 @@ jobs:
           echo RunDuration "${run_duration}"         
       - name: delete-long-running-run
         run: |
-          case ${run_status} in
-            running)
+          case ${run_status} in 
+            stopped)
+              echo "${{ github.event.inputs.run_name }} is stopped" 
               ;;
             *)
               echo "${{ github.event.inputs.run_name }} is not running"

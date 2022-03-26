@@ -1,13 +1,8 @@
 name: 'Grid.ai Stop Run'
 on:
-  workflow_dispatch:
-    inputs:
-      run_name:
-        required: true
-        type: string
-      run_time:
-        required: true
-        type: int
+  schedule:
+    # Runs "at 10pm" (see https://crontab.guru)
+    - cron: '*/5 * * * *'
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
@@ -18,32 +13,26 @@ jobs:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
           gridai-key: ${{ secrets.GRIDAI_KEY }}   
       - run: |
-          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
-          # pool at 1 mins interval
-          # pool at 1 mins interval
-          # pool at 1 mins interval
+          export RUN_STATUS=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | awk '{print $6}'
+          # 1 mins interval
           export run_status=$RUN_STATUS
-          export run_duration=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $10}'| cut -d 'd' -f 1)   
-          echo "run_duration=${run_duration}" >> $GITHUB_ENV
-          export run_name=${{ github.event.inputs.run_name }}
+          export RUN_DURATION=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | awk '{print $10}'| cut -d 'd' -f 1)   
+          echo "run_duration=$RUN_DURATION" >> $GITHUB_ENV
+          export run_name=${{ secrets.RUN_NAME }}
           echo "$run_name"
           echo "$run_status"
           echo "$run_duration"         
       - name: delete-long-running-run
         run: |
-          case ${run_status} in 
-            stopped)
+          case $RUN_STATUS in 
+            cancelled)
               echo "${{ github.event.inputs.run_name }} is stopped" 
               ;;
             *)
               echo "${{ github.event.inputs.run_name }} is not running"
               exit 1
           esac  
-          if [[ "${run_duration}" > "${{ github.event.inputs.run_time }}" ]]; then
-            echo "Run duration has exceeded crossed threhold: ${RUN_DURATION} Run is being deleted"
+          if [[ "${run_duration}" > "${{ secrets.RUN_DURATION }}" ]]; then
+            echo "Run duration has exceeded ${RUN_DURATION} ${{ secrets.RUN_NAME }} is being stopped"
             grid run stop ${{ github.event.inputs.run_name }}
           fi
-      - run: |
-          echo "$run_status"
-          echo "$run_duration"
-

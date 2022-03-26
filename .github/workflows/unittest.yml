@@ -1,6 +1,6 @@
 name: 'Grid.ai Stop Run'
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       run_name:
         required: true

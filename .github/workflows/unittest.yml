@@ -21,8 +21,8 @@ jobs:
       - name: delete-long-running-run
         run: |
           case $RUN_STATUS in 
-            cancelled)
-              echo "${{ secrets.RUN_NAME }} is stopped" 
+            running)
+              echo "${{ secrets.RUN_NAME }} is running" 
               ;;
             *)
               echo "${{ secrets.RUN_NAME }} is not running"

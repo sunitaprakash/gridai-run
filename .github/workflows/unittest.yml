@@ -1,8 +1,10 @@
 name: 'Grid.ai Stop Run'
 on:
- schedule:
-    # Runs "at 10pm" (see https://crontab.guru)
-    - cron: '*/1 * * * *'
+  workflow_dispatch:
+    inputs:
+      run_name:
+        required: true
+        type: string
 jobs:
   gridai-run:
     runs-on: ubuntu-latest

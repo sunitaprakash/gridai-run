@@ -20,7 +20,8 @@ jobs:
           export RUN_STATUS_T2=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }})
           echo $RUN_STATUS_T2
           export RUN_STATUS=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | grep ubiquitous-… | awk -F, '{print $2}')
-          export RUN_STATUS2=$(grid status ${{ secrets.RUN_NAME }} | awk -F, '{print $6}')
+          export RUN_STATUS5=$($RUN_STATUS_T2 | awk  '{print $6}')
+          export RUN_STATUS2=$(grid status ${{ secrets.RUN_NAME }} | awk  '{print $6}')
           # 1 mins interval
           export "RUN_STATUS=${RUN_STATUS} >> $GITHUB_ENV
           export "RUN_STATUS2=${RUN_STATUS2} >> $GITHUB_ENV

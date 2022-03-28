@@ -20,8 +20,10 @@ jobs:
           export RUN_STATUS_T2=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }})
           echo $RUN_STATUS_T2
           export RUN_STATUS=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | grep ubiquitous-… | awk -F, '{print $2}')
+          export RUN_STATUS2=$(grid status ${{ secrets.RUN_NAME }} | awk -F, '{print $6}')
           # 1 mins interval
           export "RUN_STATUS=${RUN_STATUS} >> $GITHUB_ENV
+          export "RUN_STATUS2=${RUN_STATUS2} >> $GITHUB_ENV
           export RUN_DURATION=$(grid status ${{ secrets.RUN_NAME }} | grep ${{ secrets.RUN_NAME }} | awk '{print $10}'| cut -d 'd' -f 1)   
           echo "RUN_DURATION=${RUN_DURATION}" >> $GITHUB_ENV       
       - name: delete-long-running-run

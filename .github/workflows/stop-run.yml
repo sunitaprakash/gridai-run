@@ -9,36 +9,26 @@ on:
       run_time:
         required: true
         type: int
-      outputs:
-      run-status: 
-         value: ${{ steps.run-script.outputs.RUN_STATUS }}          
-      run-duration: 
-         value: ${{ steps.run-status.outputs.RUN_DURATION }}
 jobs:
   gridai-actions:
     runs-on: ubuntu-latest
-    env:
-       RUN_STATUS: temp
-       RUN_TIME: -1 
     steps:
       - uses: actions/checkout@v2
       - uses: gridai-actions/gridai-login@v0
         with:
           gridai-username: ${{ secrets.GRIDAI_USERNAME }} 
-          gridai-key: ${{ secrets.GRIDAI_KEY }}   
-      - run: |
-          echo The RunName is ${{ github.event.inputs.run_name }}           
+          gridai-key: ${{ secrets.GRIDAI_KEY }}        
       - name: get-run-status
         run: |
-          ::set-output name=RUN_STATUS::$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
-          ::set-output name=RUN_DURATION::$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }}| awk '{print $10}'| cut -d 'd' -f 1)
+          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
+          export RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }}| awk '{print $10}'| cut -d 'd' -f 1)
         id: run-status          
       - name: print-run-status
         run: |
-          echo "Run status : ${{ steps.run-status.outputs.RUN_STATUS }}"
+          echo "Run status : $RUN_STATUS"
       - name: print-run-duration
         run: |
-          echo "Run duration : ${{ steps.run-status.RUN_DURATION }}"
+          echo "Run duration : $RUN_DURATION"
       - name: delete-long-running-run
         run: |
           if [[ "${RUN_DURATION}" > "$${{ github.event.inputs.run_time }}" ]]; then

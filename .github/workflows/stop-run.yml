@@ -20,8 +20,8 @@ jobs:
           gridai-key: ${{ secrets.GRIDAI_KEY }}        
       - name: get-run-status
         run: |
-          export RUN_STATUS=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }} | awk '{print $6}')
-          export RUN_DURATION=$(grid status ${{ github.event.inputs.run_name }} | grep ${{ github.event.inputs.run_name }}| awk '{print $10}'| cut -d 'd' -f 1)
+          export RUN_STATUS=$(grid status ${{  secrets.RUNNAME }} | grep ${{ secrets.RUNNAME }} | awk '{print $6}')
+          export RUN_DURATION=$(grid status ${{ secrets.RUNNAME }} | grep ${{ secrets.RUNNAME }}| awk '{print $10}'| cut -d 'd' -f 1)
         id: run-status          
       - name: print-run-status
         run: |

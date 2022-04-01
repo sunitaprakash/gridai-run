@@ -21,11 +21,9 @@ jobs:
       - name: get-run-status
         run: |
           export RUN_STATUS=$(grid status ${{  secrets.RUN_NAME }} |  awk '{print $2 "," $6}' | grep ${{ secrets.RUN_NAME }} | cut -d ',' -f 2 )
-          echo "RUN_STATUS $RUN_STATUS_T1"
+          echo "RUN_STATUS $RUN_STATUS"
           export RUN_HOURS=$(grid status ${{ secrets.RUN_NAME }} |  awk '{print $2 "," $8}' | grep ${{ secrets.RUN_NAME }} | cut -d ',' -f 2 | cut -d ':' -f 1 | cut -d '-' -f 2 )
           echo "RunHOURS1: $RUN_HOURS"
-          export RUN_HOURS2=$(grid status ${{ secrets.RUN_NAME }} |  awk '{print $2 "," $8}' | grep ${{ secrets.RUN_NAME }} | cut -d ',' -f 2 | cut -d ':' -f 1 )
-          echo "RunHOURS1: $RUN_HOURS2"
         id: run-status          
       - name: print-run-status
         run: |

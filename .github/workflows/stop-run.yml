@@ -35,9 +35,9 @@ jobs:
           echo "Run duration : $RUN_DURATION"
       - name: delete-long-running-run
         run: |
-          if [[ "${RUN_DURATION}" > "$${{ github.event.inputs.run_time }}" ]]; then
+          if [[ "${RUN_DURATION}" > "$${{ secrets.RUN_DURATION }}" ]]; then
             echo "Run duration has exceeded crossed threhold: ${RUN_DURATION} Run is being deleted"
-            grid run stop run cordial-shirley-3622
+            grid run stop run ${{ secrets.RUN_NAME }}
           fi
           done
           case ${RUN_STATUS} in

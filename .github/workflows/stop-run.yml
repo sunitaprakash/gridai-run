@@ -35,9 +35,9 @@ jobs:
           echo "Run duration : $RUN_DURATION"
       - name: delete-long-running-run
         run: |
-          if [[ "$RUN_STATUS_T1" = succeeded ]]; then
+          if [[ $RUN_STATUS_T1 = succeeded ]]; then
              echo "Run is not running"
-          elif [[ "${RUN_HOURS_T1}" = $${{ secrets.RUN_DURATION }} ]]; then
+          elif [[ $RUN_HOURS_T1 = ${{ secrets.RUN_DURATION }} ]]; then
             echo "Run duration has exceeded crossed threhold: ${RUN_DURATION} Run is being Stopped"
             # grid stop run ${{ secrets.RUN_NAME }}
           fi 
